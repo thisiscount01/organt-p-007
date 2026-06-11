@@ -1,0 +1,13 @@
+{
+  "name": "korea-festival-map",
+  "version": "1.0.0",
+  "description": "전국 축제 지도 — 한국관광공사 TourAPI 기반",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^2.7.0"
+  }
+}

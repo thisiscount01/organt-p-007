@@ -1,0 +1,523 @@
+/* ── Reset & Base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  background: var(--season-bg, #E3F2FD);
+  color: var(--season-text, #01579B);
+  transition: background 0.5s ease, color 0.5s ease;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── CSS Custom Properties (season-driven) ───────────────────────────────── */
+:root {
+  /* 기본: 여름 */
+  --season-primary:    #0277BD;
+  --season-secondary:  #F9A825;
+  --season-bg:         #E3F2FD;
+  --season-accent:     #01579B;
+  --season-light:      #B3E5FC;
+  --season-text:       #01579B;
+  --season-panel-bg:   #F0F9FF;
+  --season-marker:     #E65100;
+  --season-marker-bg:  #FFF3E0;
+
+  --header-h: 52px;
+  --panel-w: 30%;
+  --map-w: 70%;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 20px;
+  height: var(--header-h);
+  background: var(--season-primary);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  flex-shrink: 0;
+  z-index: 1000;
+  transition: background 0.5s ease;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.header-icon { font-size: 22px; flex-shrink: 0; }
+
+.header-title {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.season-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.22);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Filter Buttons ──────────────────────────────────────────────────────── */
+.filter-nav {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.filter-btn {
+  padding: 5px 14px;
+  border: 1.5px solid rgba(255,255,255,0.55);
+  border-radius: 20px;
+  background: transparent;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.filter-btn:hover {
+  background: rgba(255,255,255,0.18);
+}
+
+.filter-btn.active {
+  background: #fff;
+  color: var(--season-primary);
+  border-color: #fff;
+}
+
+.filter-btn:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.8);
+  outline-offset: 2px;
+}
+
+/* ── Main Layout ─────────────────────────────────────────────────────────── */
+.app-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── Map Section ─────────────────────────────────────────────────────────── */
+.map-section {
+  position: relative;
+  flex: 0 0 var(--map-w);
+  overflow: hidden;
+}
+
+.map-container {
+  width: 100%;
+  height: 100%;
+  background: #dde8f0;
+}
+
+/* ── Loading Overlay ─────────────────────────────────────────────────────── */
+.map-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(255,255,255,0.82);
+  backdrop-filter: blur(3px);
+  z-index: 800;
+  font-size: 14px;
+  color: var(--season-accent);
+  font-weight: 600;
+  transition: opacity 0.3s ease;
+}
+
+.map-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.spinner {
+  width: 34px;
+  height: 34px;
+  border: 3px solid var(--season-light);
+  border-top-color: var(--season-primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 지도 위 핀 카운트 */
+.map-pin-count {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 700;
+  background: rgba(255,255,255,0.9);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--season-accent);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  pointer-events: none;
+}
+
+/* ── Side Panel ──────────────────────────────────────────────────────────── */
+.side-panel {
+  flex: 0 0 var(--panel-w);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--season-panel-bg);
+  border-left: 1px solid var(--season-light);
+  transition: background 0.5s, border-color 0.5s;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--season-light);
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.5);
+}
+
+.panel-count {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--season-primary);
+}
+
+.panel-range {
+  font-size: 11px;
+  color: #888;
+}
+
+/* ── Festival Detail Card ────────────────────────────────────────────────── */
+.festival-detail {
+  position: relative;
+  flex-shrink: 0;
+  border-bottom: 2px solid var(--season-primary);
+  background: #fff;
+  transition: border-color 0.5s;
+}
+
+.detail-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.45);
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  font-family: inherit;
+}
+
+.detail-close:hover { background: rgba(0,0,0,0.65); }
+
+.detail-image-wrap {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+  background: var(--season-light);
+  transition: background 0.5s;
+}
+
+.detail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s;
+}
+
+.detail-image.hidden { display: none; }
+
+.detail-img-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 52px;
+  position: absolute;
+  inset: 0;
+  background: var(--season-light);
+}
+
+.detail-season-tag {
+  position: absolute;
+  bottom: 8px;
+  left: 10px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--season-primary);
+  letter-spacing: 0.2px;
+}
+
+.detail-body {
+  padding: 14px 16px 16px;
+}
+
+.detail-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--season-accent);
+  margin-bottom: 8px;
+  line-height: 1.35;
+  transition: color 0.5s;
+}
+
+.detail-meta {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.meta-item {
+  font-size: 12px;
+  color: #555;
+  display: flex;
+  gap: 4px;
+}
+
+.detail-desc {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.7;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Festival List ───────────────────────────────────────────────────────── */
+.festival-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0 8px;
+  scroll-behavior: smooth;
+}
+
+.festival-list::-webkit-scrollbar { width: 5px; }
+.festival-list::-webkit-scrollbar-track { background: transparent; }
+.festival-list::-webkit-scrollbar-thumb {
+  background: var(--season-light);
+  border-radius: 4px;
+}
+
+.festival-list-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  transition: background 0.15s;
+  border-left: 3px solid transparent;
+}
+
+.festival-list-item:hover {
+  background: var(--season-light);
+}
+
+.festival-list-item.active {
+  background: var(--season-light);
+  border-left-color: var(--season-primary);
+}
+
+.item-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.item-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.item-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.item-meta {
+  font-size: 11px;
+  color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Empty State ─────────────────────────────────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px;
+  color: #bbb;
+  gap: 10px;
+  text-align: center;
+}
+
+.empty-state span { font-size: 36px; }
+.empty-state p { font-size: 13px; line-height: 1.5; }
+
+/* ── Leaflet Popup Customization ─────────────────────────────────────────── */
+.leaflet-popup-content-wrapper {
+  border-radius: 10px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.16) !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  min-width: 200px;
+  max-width: 240px;
+}
+
+.popup-card {
+  padding: 14px 14px 12px;
+}
+
+.popup-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 5px;
+  line-height: 1.3;
+}
+
+.popup-region {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 3px;
+}
+
+.popup-dates {
+  font-size: 11px;
+  color: #999;
+  margin-bottom: 10px;
+}
+
+.popup-btn {
+  display: block;
+  width: 100%;
+  padding: 7px;
+  border: none;
+  border-radius: 6px;
+  background: var(--season-primary, #0277BD);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: opacity 0.2s;
+  font-family: inherit;
+  letter-spacing: 0.2px;
+}
+
+.popup-btn:hover { opacity: 0.85; }
+
+/* ── Custom Marker ───────────────────────────────────────────────────────── */
+.custom-marker-div { background: none !important; border: none !important; }
+
+/* ── Mobile (≤768px): 세로 스택 ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  :root {
+    --panel-w: 100%;
+    --map-w: 100%;
+    --header-h: 48px;
+  }
+
+  .header-title { font-size: 15px; }
+
+  .app-layout {
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .map-section {
+    flex: none;
+    height: 40vh;
+    min-height: 220px;
+  }
+
+  .side-panel {
+    flex: none;
+    height: 60vh;
+    border-left: none;
+    border-top: 2px solid var(--season-primary);
+    overflow-y: auto;
+  }
+
+  .festival-list {
+    flex: unset;
+    height: auto;
+    max-height: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header { padding: 0 12px; gap: 8px; }
+  .header-title { display: none; }
+  .season-badge { font-size: 11px; padding: 2px 8px; }
+  .filter-btn { padding: 4px 10px; font-size: 11px; }
+  .detail-image-wrap { height: 130px; }
+}

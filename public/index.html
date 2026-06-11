@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>전국 축제 지도 🗺</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎉</text></svg>" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── 헤더 ── -->
+  <header class="app-header">
+    <div class="header-brand">
+      <span class="header-icon" aria-hidden="true">🎉</span>
+      <h1 class="header-title">전국 축제 지도</h1>
+      <span class="season-badge" id="seasonBadge" aria-label="현재 계절"></span>
+    </div>
+    <nav class="filter-nav" role="navigation" aria-label="날짜 필터">
+      <button class="filter-btn" data-filter="week">이번 주</button>
+      <button class="filter-btn" data-filter="month">이번 달</button>
+      <button class="filter-btn active" data-filter="three">3개월</button>
+    </nav>
+  </header>
+
+  <!-- ── 메인 레이아웃 ── -->
+  <main class="app-layout">
+
+    <!-- 지도 영역 -->
+    <section class="map-section" aria-label="축제 지도">
+      <div id="map" class="map-container"></div>
+
+      <!-- 로딩 오버레이 -->
+      <div class="map-overlay" id="loadingOverlay" role="status" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <span>축제 데이터 로딩 중…</span>
+      </div>
+
+      <!-- 핀 개수 뱃지 -->
+      <div class="map-pin-count" id="mapPinCount" aria-live="polite"></div>
+    </section>
+
+    <!-- 사이드 패널 -->
+    <aside class="side-panel" id="sidePanel" aria-label="축제 정보">
+
+      <!-- 선택된 축제 상세 -->
+      <div class="festival-detail" id="festivalDetail" hidden>
+        <button class="detail-close" id="detailClose" aria-label="닫기">✕</button>
+        <div class="detail-image-wrap" id="detailImageWrap">
+          <img id="detailImage" src="" alt="" class="detail-image" />
+          <div class="detail-img-placeholder" id="detailImgPlaceholder" hidden></div>
+          <div class="detail-season-tag" id="detailSeasonTag"></div>
+        </div>
+        <div class="detail-body">
+          <h2 class="detail-title" id="detailTitle"></h2>
+          <ul class="detail-meta" aria-label="축제 정보">
+            <li class="meta-item">📅 <span id="detailDates"></span></li>
+            <li class="meta-item">📍 <span id="detailRegion"></span></li>
+          </ul>
+          <p class="detail-desc" id="detailDesc"></p>
+        </div>
+      </div>
+
+      <!-- 패널 헤더 -->
+      <div class="panel-header">
+        <span class="panel-count" id="panelCount" aria-live="polite">0개의 축제</span>
+        <span class="panel-range" id="panelRange"></span>
+      </div>
+
+      <!-- 축제 목록 -->
+      <div class="festival-list" id="festivalList" role="list">
+        <div class="empty-state" id="emptyState" hidden role="status">
+          <span aria-hidden="true">🔍</span>
+          <p>해당 기간에 등록된 축제가 없습니다</p>
+        </div>
+      </div>
+
+    </aside>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="app.js"></script>
+</body>
+</html>
