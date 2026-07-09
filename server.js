@@ -22,7 +22,7 @@ const CLASS_NAMES = Object.keys(balance.classes);
 // 배포 검증 마커 — /healthz에 노출한다. 재배포가 실제로 롤됐는지(캐시된 옛 인스턴스가 아니라 새 빌드가
 // 라이브인지)를 이 값의 변화로 제3자가 재현 확인할 수 있게 한다. env 변경(DATA_DIR 영속 디스크 등)은
 // 재배포로만 픽업되므로, 이 마커가 갱신됐다 == 새 env가 적용된 인스턴스가 라이브다.
-const BUILD_TAG = 'persist-verify-1';
+const BUILD_TAG = 'persist-verify-2';
 
 const app = express();
 app.use(express.json());
