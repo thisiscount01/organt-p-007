@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>무너진 탑 — 레이드 RPG</title>
+<meta name="color-scheme" content="dark" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<a class="skip-link" href="#main">본문 바로가기</a>
+<div id="app">
+  <header id="topbar">
+    <span class="brand">무너진 탑</span>
+    <div id="charSummary" class="char-summary" hidden>
+      <span id="csName"></span>
+      <span id="csClass" class="badge"></span>
+      <span id="csLevel"></span>
+      <span id="csGold" class="gold">0G</span>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- 1) 캐릭터 생성 -->
+    <section id="screen-create" class="screen" aria-labelledby="create-h">
+      <h1 id="create-h">캐릭터를 만드세요</h1>
+      <form id="createForm" class="panel" novalidate>
+        <label for="charName">이름</label>
+        <input id="charName" name="name" type="text" maxlength="20" required autocomplete="off"
+               placeholder="1~20자" />
+        <p id="nameError" class="field-error" role="alert" hidden></p>
+
+        <fieldset id="classFieldset">
+          <legend>직업</legend>
+          <div class="class-grid" role="radiogroup" aria-label="직업 선택">
+            <button type="button" class="class-card" data-class="warrior" role="radio" aria-checked="false">
+              <strong>전사</strong>
+              <span class="class-tag">근접탱커 · 안전판</span>
+              <span class="class-desc">HP·방어 최고, 성장 느림. 사고 없이 안정적으로 크고 싶다면.</span>
+            </button>
+            <button type="button" class="class-card" data-class="archer" role="radio" aria-checked="false">
+              <strong>궁수</strong>
+              <span class="class-tag">밸런스딜러 · 초심자 추천</span>
+              <span class="class-desc">공격과 생존 사이 균형. 뭘 고를지 모르겠다면 이거.</span>
+            </button>
+            <button type="button" class="class-card" data-class="mage" role="radio" aria-checked="false">
+              <strong>마법사</strong>
+              <span class="class-tag">글래스캐논 · 고위험고보상</span>
+              <span class="class-desc">화력 최고, 맷집 최저. 회피(dodge)에 자신 있다면.</span>
+            </button>
+          </div>
+        </fieldset>
+
+        <button id="createSubmit" type="submit" class="primary" disabled>모험 시작</button>
+      </form>
+    </section>
+
+    <!-- 2) 사냥터 -->
+    <section id="screen-hunting" class="screen" aria-labelledby="hunt-h" hidden>
+      <h1 id="hunt-h">사냥터 <span id="huntZoneLabel" class="zone-label"></span></h1>
+      <div class="hunting-layout">
+        <div id="huntingScenePane" class="scene-pane" aria-hidden="true"></div>
+        <div class="panel stat-panel">
+          <dl class="stat-list">
+            <div><dt>레벨</dt><dd id="stLevel">1</dd></div>
+            <div><dt>경험치</dt><dd id="stExp">0 / 0</dd></div>
+            <div><dt>HP</dt><dd id="stHp">-</dd></div>
+            <div><dt>방어력</dt><dd id="stDef">-</dd></div>
+            <div><dt>초당 딜(DPS)</dt><dd id="stDps">-</dd></div>
+            <div><dt>골드</dt><dd id="stGold">0</dd></div>
+            <div><dt>강화</dt><dd id="stEnhance">+0</dd></div>
+          </dl>
+          <div class="exp-bar" role="progressbar" aria-label="경험치" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div id="expBarFill" class="exp-bar-fill"></div>
+          </div>
+          <button id="huntBtn" type="button" class="primary" accesskey="h">사냥하기 (H)</button>
+          <p id="huntStatus" role="status" aria-live="polite" class="hunt-status"></p>
+          <button id="enhanceBtn" type="button" class="secondary">장비 강화 (골드 소모)</button>
+          <p id="enhanceStatus" role="status" aria-live="polite" class="hunt-status"></p>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>보스룸</h2>
+        <p class="hint">사냥터에서 성장했다면 파티를 모아 도전하세요 — 혼자서는 문이 열리지 않습니다.</p>
+        <div class="room-actions">
+          <button id="createRoomBtn" type="button" class="primary">방 만들기</button>
+          <div class="join-row">
+            <label for="joinCode">방 코드로 입장</label>
+            <input id="joinCode" type="text" maxlength="6" placeholder="예: AB23CD" autocomplete="off" />
+            <button id="joinRoomBtn" type="button" class="secondary">입장</button>
+          </div>
+        </div>
+        <p id="roomActionStatus" role="status" aria-live="polite" class="hunt-status"></p>
+      </div>
+    </section>
+
+    <!-- 3) 보스룸 로비/전투 -->
+    <section id="screen-room" class="screen" aria-labelledby="room-h" hidden>
+      <h1 id="room-h">보스룸 <span id="roomCodeLabel" class="zone-label"></span></h1>
+
+      <div id="roomStateBanner" class="state-banner" role="status" aria-live="polite">대기 중…</div>
+
+      <ul id="memberList" class="member-list" aria-label="파티원"></ul>
+
+      <div id="lobbyControls" class="panel">
+        <p class="hint">정원 4명, 최소 <strong id="minToStartLabel">2</strong>명이면 시작할 수 있습니다(호스트만).</p>
+        <button id="startCombatBtn" type="button" class="primary">전투 시작</button>
+        <p id="lobbyStatus" role="status" aria-live="polite" class="hunt-status"></p>
+      </div>
+
+      <div id="combatArea" hidden>
+        <div class="boss-hpbar-wrap">
+          <div class="boss-name" id="bossName">무너진 탑의 파수꾼</div>
+          <div class="boss-hpbar" role="progressbar" aria-label="보스 체력" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+            <div id="bossHpFill" class="boss-hpbar-fill"></div>
+            <span id="bossHpText" class="boss-hpbar-text">100%</span>
+          </div>
+          <div class="combat-meta">
+            <span id="phaseLabel">페이즈 1</span>
+            <span id="enrageTimer" class="enrage-timer">광폭화까지 --:--</span>
+          </div>
+        </div>
+
+        <div id="bossScenePane" class="scene-pane" aria-hidden="true">
+          <div id="telegraphOverlay" class="telegraph-overlay" hidden aria-hidden="true"></div>
+          <div id="telegraphBanner" class="telegraph-banner" role="alert" hidden>
+            <span id="telegraphCountdown">회피!</span>
+          </div>
+        </div>
+
+        <div class="dodge-row">
+          <button id="dodgeBtn" type="button" class="dodge-btn" accesskey="d">
+            회피 (스페이스바 / D)
+          </button>
+          <span id="dodgeFeedback" class="dodge-feedback" role="status" aria-live="polite"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4) 결과 -->
+    <section id="screen-result" class="screen" aria-labelledby="result-h" hidden>
+      <h1 id="result-h"><span id="resultTitle">전투 종료</span></h1>
+      <div class="panel">
+        <p id="resultBody"></p>
+        <div class="result-actions">
+          <button id="retryBtn" type="button" class="primary">다시 도전 (새 방 만들기)</button>
+          <button id="backToHuntBtn" type="button" class="secondary">사냥터로</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</div>
+
+<script>
+  // 로컬 검증 전용 오버라이드 — ?api=http://host:port 로 API_BASE를 지정할 때만 same-origin이 아닌
+  // 오리진을 사용(운영 배포에선 쿼리 없음 → 항상 same-origin, 아래 줄은 아무 영향 없음).
+  (function () {
+    var qs = new URLSearchParams(location.search);
+    var api = qs.get('api');
+    if (api) window.__RPG_CONFIG = { apiBase: api };
+  })();
+</script>
+<script src="vendor/phaser.min.js"></script>
+<script src="vendor/socket.io.min.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

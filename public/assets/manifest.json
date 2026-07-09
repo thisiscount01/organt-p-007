@@ -1,0 +1,215 @@
+{
+  "_readme": "게임 비주얼 디자이너 인도 — CC0 소스(Kenney Tiny Dungeon / Tiny Town, attribution 하단 참고)를 절차적으로 크롭+듀오톤 리컬러+합성해서 만든 실제 스프라이트/타일/이펙트 자산. 전부 2의 거듭제곱 픽셀 크기, 알파 투명 배경, 씬당 예산(2MB) 대비 총합 약 72KB로 여유 큼. Phaser CANVAS 렌더러 기준(fillGradientStyle 등 WebGL 전용 API 미사용 — 그라디언트는 전부 이 PNG들에 빌드타임에 구웠음). game.js는 프론트(556002) 소유라 로딩 배선은 프론트에 위임 — 이 문서는 그 배선에 필요한 프레임 스펙.",
+  "classes": {
+    "warrior": {
+      "file": "sprites/classes/warrior.png",
+      "size": [
+        128,
+        128
+      ],
+      "anchor": [
+        0.5,
+        0.92
+      ],
+      "tint_hint": "#274b6b(기존 game.js setClassTint 파랑과 일치)",
+      "note": "전신 판금갑옷 실루엣 — 탱커 즉시 판독"
+    },
+    "archer": {
+      "file": "sprites/classes/archer.png",
+      "size": [
+        128,
+        128
+      ],
+      "anchor": [
+        0.5,
+        0.92
+      ],
+      "tint_hint": "#3f6b27(기존 초록)",
+      "note": "녹색 헤드밴드 스카우트 — 균형딜러 톤"
+    },
+    "mage": {
+      "file": "sprites/classes/mage.png",
+      "size": [
+        128,
+        128
+      ],
+      "anchor": [
+        0.5,
+        0.92
+      ],
+      "tint_hint": "#5b2b6b(기존 보라)",
+      "note": "로브+지팡이 실루엣 — 글래스캐논 즉시 판독"
+    }
+  },
+  "monsters": {
+    "slime": {
+      "file": "sprites/monsters/slime.png",
+      "size": [
+        128,
+        128
+      ],
+      "anchor": [
+        0.5,
+        0.92
+      ],
+      "note": "사냥터 기본 몹 — 밝은 민트, 위협감 낮은 반복노동 톤에 맞춤"
+    }
+  },
+  "boss": {
+    "_note": "페이즈별 별도 텍스처(런타임 틴트 아님, 오라 색이 이미지에 이미 구워짐) — setPhase(idx) 시 setTexture 키만 바꾸면 됨.",
+    "phase1": {
+      "file": "sprites/boss/guardian_phase1.png",
+      "size": [
+        256,
+        256
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "aura": "amber(#ffcf5c) — GDD P1 100-70%"
+    },
+    "phase2": {
+      "file": "sprites/boss/guardian_phase2.png",
+      "size": [
+        256,
+        256
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "aura": "amber 진하게 — P2 70-40%, adds 2기 동반"
+    },
+    "phase3": {
+      "file": "sprites/boss/guardian_phase3.png",
+      "size": [
+        256,
+        256
+      ],
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "aura": "red(#e2513f) — P3 40-0%, 자버프 ATK+30% 긴급감"
+    }
+  },
+  "tiles_hunting": {
+    "_note": "지상층(사냥터) — 밝은 중간톤, TileSprite로 반복 사용 권장(seamless 128x128).",
+    "grass": {
+      "file": "tiles/hunting/grass_tile.png",
+      "size": [
+        128,
+        128
+      ],
+      "tileable": true
+    },
+    "grass_flower_accent": {
+      "file": "tiles/hunting/grass_flower_tile.png",
+      "size": [
+        128,
+        128
+      ],
+      "tileable": true,
+      "note": "grass 위 드문 포인트로만 소량 배치(과용 금지)"
+    },
+    "dirt": {
+      "file": "tiles/hunting/dirt_tile.png",
+      "size": [
+        128,
+        128
+      ],
+      "tileable": true,
+      "note": "몬스터 발밑 오솔길 등 좁은 영역에"
+    },
+    "tree_round": {
+      "file": "tiles/hunting/tree_round.png",
+      "size": [
+        128,
+        128
+      ],
+      "anchor": [
+        0.5,
+        0.95
+      ],
+      "note": "지평선 장식용 단독 배치, 반복타일 아님"
+    },
+    "tree_trunk": {
+      "file": "tiles/hunting/tree_trunk.png",
+      "size": [
+        128,
+        128
+      ],
+      "anchor": [
+        0.5,
+        0.95
+      ],
+      "note": "tree_round와 번갈아 배치해 단조로움 방지"
+    }
+  },
+  "tiles_boss": {
+    "_note": "탑 정상/지하(보스룸) — 저채도 청록·보라, 역광 실루엣 강조. 전부 duotone 리컬러로 --bg-boss 계열 팔레트에 맞춤.",
+    "wall_dark": {
+      "file": "tiles/boss/wall_dark.png",
+      "size": [
+        128,
+        128
+      ],
+      "tileable": true,
+      "note": "배경 전체 채우기, 매우 어두운 남색 — 실루엣이 그 위에 도드라지게"
+    },
+    "floor_stone": {
+      "file": "tiles/boss/floor_stone.png",
+      "size": [
+        128,
+        128
+      ],
+      "tileable": true,
+      "note": "청회색 석재 바닥, 전투 영역 하단"
+    },
+    "pillar": {
+      "file": "tiles/boss/pillar.png",
+      "size": [
+        128,
+        128
+      ],
+      "tileable_y": true,
+      "note": "세로로 반복(TileSprite height=화면높이)해 저앵글 역광 기둥 실루엣 연출 — 현재 game.js의 fillRect 기둥을 대체"
+    }
+  },
+  "effects": {
+    "_note": "64x64, 중심원점(0.5,0.5). 8~10프레임(60fps 기준 약 130~170ms) scale 1→1.4 + alpha 1→0 트윈으로 재생 권장 — 그 이상 오래 끌면 타격감이 아니라 장식으로 읽힘.",
+    "hit_impact": {
+      "file": "effects/hit_impact.png",
+      "size": [
+        64,
+        64
+      ],
+      "color": "#ffcf5c",
+      "usage": "사냥 HIT/보스 AoE 피격 리액션(현재 game.js _impact/flashAoeHit 대체)"
+    },
+    "dodge_success": {
+      "file": "effects/dodge_success.png",
+      "size": [
+        64,
+        64
+      ],
+      "color": "#4caf7d",
+      "usage": "회피 성공(flashDodge 대체) — success 토큰과 색 일치"
+    },
+    "hit_fail": {
+      "file": "effects/hit_fail.png",
+      "size": [
+        64,
+        64
+      ],
+      "color": "#ff6b52",
+      "usage": "사냥 반격/회피 실패 시 danger-strong 계열 강한 임팩트"
+    }
+  },
+  "attribution": {
+    "source": "Kenney (kenney.nl) — Tiny Dungeon, Tiny Town 팩",
+    "license": "CC0 1.0 Universal — 상업적 이용 포함 자유 사용, 표기 의무 없음(자발적 크레딧 권장)",
+    "processing": "원본 16x16 타일 크롭 → 정수배 최근접이웃(nearest-neighbor) 업스케일(픽셀아트 선명도 유지) → 필요 시 duotone 리컬러(팔레트 토큰 hex 그대로 매핑) → 합성. 그라디언트(보스 오라)는 전부 빌드타임에 PNG에 구웠음(런타임 fillGradientStyle 미사용, CANVAS 렌더러 호환)."
+  }
+}

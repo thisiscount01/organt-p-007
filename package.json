@@ -1,0 +1,27 @@
+{
+  "name": "raid-rpg-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "레이드 RPG — 사냥터 파밍 REST + 보스룸 실시간(Socket.IO) 서버 코어",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "sim": "node sim/balance-sim.js",
+    "selfcheck": "node test/concurrency-check.js",
+    "selfcheck:dodge": "node test/dodge-check.js",
+    "selfcheck:dodge-ws": "node test/dodge-ws-check.js",
+    "selfcheck:dodge-tick-lag": "node test/dodge-tick-lag-check.js",
+    "selfcheck:reward": "node test/reward-check.js",
+    "selfcheck:hunt-in-combat": "node test/hunt-in-combat-check.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "socket.io-client": "^4.7.5"
+  }
+}

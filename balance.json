@@ -1,0 +1,25 @@
+{
+  "classes": {
+    "warrior": {"baseHP":120,"hpGrowth":18,"baseDEF":6,"defGrowth":1.0,"effectiveDpsBase":8,"effectiveDpsGrowth":1.4},
+    "archer":  {"baseHP":85, "hpGrowth":12,"baseDEF":2,"defGrowth":0.4,"effectiveDpsBase":11,"effectiveDpsGrowth":2.0},
+    "mage":    {"baseHP":70, "hpGrowth":10,"baseDEF":1,"defGrowth":0.3,"effectiveDpsBase":13,"effectiveDpsGrowth":2.3}
+  },
+  "expTable": {"1":50,"2":90,"3":140,"4":200,"5":280,"6":380,"7":500,"8":650,"9":830},
+  "huntingZone": {"tiers":[
+    {"levelRange":[1,2],"monsterHP":30,"monsterATK":4,"exp":8,"gold":5,"dropChance":0.12},
+    {"levelRange":[3,4],"monsterHP":55,"monsterATK":7,"exp":14,"gold":9,"dropChance":0.14},
+    {"levelRange":[5,6],"monsterHP":90,"monsterATK":11,"exp":22,"gold":14,"dropChance":0.16},
+    {"levelRange":[7,8],"monsterHP":140,"monsterATK":16,"exp":32,"gold":20,"dropChance":0.18}
+  ], "respawnSeconds":8, "antiFarmMinKillIntervalMs":350},
+  "enhancement": {"maxLevel":5,"costGold":[20,45,80,130,200],"statBonusPctPerLevel":5,"successRate":1.0},
+  "bossRoom": {"roomCapacity":4,"minToStart":2,"reconnectGraceSeconds":20,"stateMachine":["FORMING","LOCKED","IN_COMBAT","RESULT"]},
+  "boss": {"id":"tower-warden","name":"무너진 탑의 파수꾼","hp":9800,"enrageSeconds":180,"targetClearSeconds":120,
+    "phases":[
+      {"hpPct":[70,100],"aoeIntervalSec":8,"telegraphSec":2.5,"adds":0},
+      {"hpPct":[40,70],"aoeIntervalSec":6,"telegraphSec":2.5,"adds":2},
+      {"hpPct":[0,40],"aoeIntervalSec":4,"telegraphSec":2.0,"adds":0,"selfBuffAtkPct":30}
+    ],
+    "telegraphReactionFrames60fps":[3,8], "telegraphNetworkSlackMs":[150,250],
+    "clearReward":{"guaranteedBossGearForOneRandomMember":true,"goldMultiplierVsHuntingZone":5}
+  }
+}

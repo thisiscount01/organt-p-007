@@ -1,0 +1,36 @@
+{
+  "generatedAt": "2026-07-08T23:56:29.876Z",
+  "n": 500,
+  "boss": {
+    "hp": 9800,
+    "enrageSeconds": 180,
+    "targetClearSeconds": 120
+  },
+  "cases": [
+    {
+      "label": "①최약체 — 전사 4인 Lv6",
+      "winRate": 85.6,
+      "meanClearSec": 176.3855140186916
+    },
+    {
+      "label": "②최속 — 마법사 4인 Lv6",
+      "winRate": 90.2,
+      "meanClearSec": 117.30376940133037
+    },
+    {
+      "label": "③2인 Lv10 러시(궁수+마법사)",
+      "winRate": 54,
+      "meanClearSec": 169.77777777777777
+    },
+    {
+      "label": "④솔로 Lv6(마법사, 최고 DPS 단일클래스로 최선의 경우 가정)",
+      "winRate": 0,
+      "meanClearSec": null
+    }
+  ],
+  "existenceTestB": {
+    "lv1WinRate": 0,
+    "lv5WinRate": 66.60000000000001,
+    "lv8WinRate": 99.8
+  }
+}
